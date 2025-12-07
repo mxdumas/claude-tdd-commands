@@ -25,10 +25,52 @@ Revue complète de la tâche, corrections et validation (phase finale TDD).
    - Si échec → analyser et corriger
    - **TOUS les tests doivent passer**
 
-5. **Vérifier la couverture TDD** :
-   - Chaque comportement du code doit avoir un test correspondant
+5. **Vérifier la couverture TDD complète** :
+
+   ## CHECKLIST DE VALIDATION
+
+   Pour **CHAQUE méthode publique**, vérifier que les tests couvrent :
+
+   ### ✅ Happy Path
+   - [ ] Cas nominal avec entrées valides
+   - [ ] Chaque paramètre optionnel testé (valeur par défaut + valeur explicite)
+   - [ ] Retour attendu vérifié (type, valeur, propriétés)
+
+   ### ✅ Null / Empty
+   - [ ] Chaque paramètre `string` testé avec `null` → `ArgumentNullException`
+   - [ ] Chaque paramètre `string` testé avec `""` → `ArgumentException` ou comportement défini
+   - [ ] Chaque paramètre objet testé avec `null` → `ArgumentNullException`
+   - [ ] Collections vides testées → comportement défini
+
+   ### ✅ Valeurs invalides / extrêmes
+   - [ ] IDs/clés inexistants → `null`, exception, ou no-op documenté
+   - [ ] Valeurs hors limites (négatifs, > max, overflow)
+   - [ ] Caractères spéciaux dans les strings (espaces, unicode, chemins invalides)
+   - [ ] Fichiers inexistants → `FileNotFoundException`
+
+   ### ✅ État inattendu
+   - [ ] Ressource modifiée entre deux appels
+   - [ ] Ressource supprimée entre deux appels
+   - [ ] Appels concurrents (si applicable)
+
+   ### ✅ Exceptions explicites
+   - [ ] Chaque `throw` dans le code a un test correspondant
+   - [ ] Type d'exception vérifié avec `Assert.Throws<T>()`
+   - [ ] Message d'exception vérifié si pertinent (`Assert.Contains()`)
+   - [ ] Paramètres qui évitent l'exception (ex: `overwrite=true`)
+
+   ### Méthode de revue
+   ```
+   Pour chaque méthode:
+   1. Lister les branches (if/else, try/catch, switch)
+   2. Vérifier qu'un test couvre chaque branche
+   3. Identifier les throws → vérifier test correspondant
+   4. Identifier les return early → vérifier test correspondant
+   5. Compter les paramètres → vérifier tests null/empty pour chacun
+   ```
+
+   - Si tests manquants détectés → **les ajouter avant de continuer**
    - Les tests doivent être significatifs (pas juste `Assert.True(true)`)
-   - Si code non testé détecté → ajouter les tests manquants
 
 6. **Revue de code** :
    - Lire les fichiers créés/modifiés (tests ET code)

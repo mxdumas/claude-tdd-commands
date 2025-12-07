@@ -18,28 +18,90 @@
    - Utiliser le code de la section "Tests (RED)"
    - Les tests doivent compiler mais ÉCHOUER (pas d'implémentation)
 
-5. **Vérifier la compilation** :
+5. **Assurer la couverture complète** :
+
+   ## CHECKLIST OBLIGATOIRE
+
+   Pour **CHAQUE méthode publique**, cocher tous les cas applicables :
+
+   ### ✅ Happy Path
+   - [ ] Cas nominal avec entrées valides
+   - [ ] Chaque paramètre optionnel testé (valeur par défaut + valeur explicite)
+   - [ ] Retour attendu vérifié (type, valeur, propriétés)
+
+   ### ✅ Null / Empty
+   - [ ] Chaque paramètre `string` testé avec `null` → `ArgumentNullException`
+   - [ ] Chaque paramètre `string` testé avec `""` → `ArgumentException` ou comportement défini
+   - [ ] Chaque paramètre objet testé avec `null` → `ArgumentNullException`
+   - [ ] Collections vides testées → comportement défini
+
+   ### ✅ Valeurs invalides / extrêmes
+   - [ ] IDs/clés inexistants → `null`, exception, ou no-op documenté
+   - [ ] Valeurs hors limites (négatifs, > max, overflow)
+   - [ ] Caractères spéciaux dans les strings (espaces, unicode, chemins invalides)
+   - [ ] Fichiers inexistants → `FileNotFoundException`
+
+   ### ✅ État inattendu
+   - [ ] Ressource modifiée entre deux appels
+   - [ ] Ressource supprimée entre deux appels
+   - [ ] Appels concurrents (si applicable)
+
+   ### ✅ Exceptions explicites
+   - [ ] Chaque `throw` dans le code a un test correspondant
+   - [ ] Type d'exception vérifié avec `Assert.Throws<T>()`
+   - [ ] Message d'exception vérifié si pertinent (`Assert.Contains()`)
+   - [ ] Paramètres qui évitent l'exception (ex: `overwrite=true`)
+
+   ### Exemple complet
+   ```csharp
+   // === Happy path ===
+   [Fact] public void Add_ValidItem_AddsToCollection() { }
+   [Fact] public void Add_WithOptionalParam_UsesProvidedValue() { }
+
+   // === Null / Empty ===
+   [Fact] public void Add_NullName_ThrowsArgumentNullException() { }
+   [Fact] public void Add_EmptyName_ThrowsArgumentException() { }
+   [Fact] public void Add_NullCollection_ThrowsArgumentNullException() { }
+
+   // === Valeurs invalides ===
+   [Fact] public void Get_NonExistentKey_ReturnsNull() { }
+   [Fact] public void Add_NegativeQuantity_ThrowsArgumentOutOfRangeException() { }
+   [Fact] public void Import_InvalidPath_ThrowsFileNotFoundException() { }
+
+   // === État inattendu ===
+   [Fact] public void Update_ItemDeletedConcurrently_ThrowsInvalidOperationException() { }
+
+   // === Exceptions explicites ===
+   [Fact] public void Add_DuplicateKey_ThrowsInvalidOperationException() { }
+   [Fact] public void Add_DuplicateKey_WithOverwrite_Succeeds() { }
+   ```
+
+6. **Vérifier la compilation** :
    ```bash
    dotnet build
    ```
    - Si erreur de compilation → corriger les tests
 
-6. **Exécuter les tests** :
+7. **Exécuter les tests** :
    ```bash
    dotnet test
    ```
    - Les tests doivent ÉCHOUER (RED)
    - C'est normal et attendu à cette étape
 
-7. **Mettre à jour state.json** : `current.phase` = "dev"
+8. **Mettre à jour state.json** : `current.phase` = "dev"
 
-8. **Afficher le résumé** :
+9. **Afficher le résumé** :
    ```
    ## RED: [E0] T3 - Titre
 
-   **Tests créés:** 5 tests dans 2 fichiers
+   **Tests créés:** 12 tests dans 2 fichiers
+   - Happy path: 5
+   - Edge cases: 4
+   - Exceptions: 3
+
    **Build:** OK
-   **Tests:** 0/5 passed (RED) ✓
+   **Tests:** 0/12 passed (RED) ✓
 
    Les tests échouent comme attendu.
 
@@ -53,5 +115,7 @@
 
 ## Notes
 - Ne pas implémenter le code métier à cette étape
-- Les tests doivent être complets et vérifier tous les comportements attendus
+- Les tests doivent être complets et vérifier TOUS les comportements
+- Chaque branche du code (if/else, try/catch) doit avoir un test
 - Si un test passe déjà, c'est suspect → vérifier qu'il teste vraiment quelque chose
+- Nommer les tests selon le pattern: `{Method}_{Scenario}_{ExpectedResult}`

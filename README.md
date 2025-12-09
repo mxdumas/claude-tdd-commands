@@ -47,6 +47,7 @@ Pour le cycle de développement.
 | `/tdd:flow:4-review` | Valide standards et couverture |
 | `/tdd:flow:5-docs` | Documente, met à jour CHANGELOG |
 | `/tdd:flow:6-done` | Commit et mise à jour du state |
+| `/tdd:flow:quickfix` | Correction rapide (worktree séparé) |
 
 ## Workflow
 
@@ -83,10 +84,25 @@ projet/
 └── README.md
 ```
 
+## Quickfix (corrections rapides)
+
+Pour les petites corrections (<20 lignes) sans passer par le cycle TDD complet.
+
+```bash
+# Setup worktree (une seule fois)
+git worktree add ../projet-quickfix -b quickfix
+
+# Dans le worktree
+/tdd:flow:quickfix "fix typo in error message"
+```
+
+Chaque quickfix crée sa propre branche et PR vers la branche courante.
+
 ## Raccourcis
 
 - `/tdd:flow:status` - Où en suis-je ?
 - `/tdd:flow:next` - Continue automatiquement
+- `/tdd:flow:quickfix "desc"` - Correction rapide
 
 ## License
 

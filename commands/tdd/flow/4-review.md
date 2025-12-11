@@ -28,11 +28,10 @@ Lire **chaque fichier modifié/créé**.
 
 #### B. Design
 
-| Aspect | Question |
-|--------|----------|
-| Responsabilité | Classe/méthode fait une seule chose ? |
-| Couplage | Trop dépendant d'autres modules ? |
-| Testabilité | Facile à tester en isolation ? |
+**Questions à se poser :**
+- Responsabilité : Classe/méthode fait une seule chose ?
+- Couplage : Trop dépendant d'autres modules ?
+- Testabilité : Facile à tester en isolation ?
 
 **Signaux d'alerte :**
 - Classe > 200 lignes, méthode > 30 lignes
@@ -48,15 +47,12 @@ Lire **chaque fichier modifié/créé**.
 
 ### 4. Revue des tests
 
-**Couverture :**
-
-| Catégorie | Présent ? |
-|-----------|-----------|
-| Comportements métier | |
-| Validation inputs | |
-| Invariants | |
-| Cas limites | |
-| Gestion erreurs | |
+**Couverture à vérifier :**
+- Comportements métier
+- Validation inputs
+- Invariants
+- Cas limites
+- Gestion erreurs
 
 **Tests manquants ?**
 - Chaque `if` → test pour chaque branche ?
@@ -64,12 +60,11 @@ Lire **chaque fichier modifié/créé**.
 
 ### 5. Conformité standards
 
-| Standard | OK ? |
-|----------|------|
-| File-scoped namespaces | |
-| Records pour modèles | |
-| Nullable (pas de `!`) | |
-| CancellationToken sur async | |
+**Checklist :**
+- [ ] File-scoped namespaces
+- [ ] Records pour modèles
+- [ ] Nullable (pas de `!`)
+- [ ] CancellationToken sur async
 
 ### 6. Corrections
 
@@ -81,15 +76,16 @@ Lire **chaque fichier modifié/créé**.
 
 Garder `current.phase` = "review".
 
-```
+```markdown
 ## Review: [E1] T4 - Titre
 
-**Build:** OK | **Tests:** 18/18 passed
+**Build:** OK
+**Tests:** 18/18 passed
 
 **Corrections appliquées:**
 - [Liste]
 
-**Couverture tests:** ✓
+**Couverture tests:** OK
 
 Lancer `/tdd:flow:5-docs` pour documenter.
 ```

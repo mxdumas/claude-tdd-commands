@@ -35,9 +35,9 @@ Commandes pour le cycle de développement TDD.
 | `/tdd:flow:status` | - | Affiche l'état actuel (epic, tâche, phase, progression) |
 | `/tdd:flow:next` | - | Exécute automatiquement la prochaine étape |
 | `/tdd:flow:1-analyze` | Plan | Analyse la tâche, écrit specs dans `docs/current-task.md` |
-| `/tdd:flow:2-test` | RED | Écrit les tests (doivent compiler mais échouer) |
+| `/tdd:flow:2-test` | RED | Écrit les tests, capture coverage baseline |
 | `/tdd:flow:3-dev` | GREEN | Implémente jusqu'à ce que tous les tests passent |
-| `/tdd:flow:4-review` | Validate | Vérifie standards, couverture, qualité |
+| `/tdd:flow:4-review` | Validate | Vérifie standards, coverage, qualité |
 | `/tdd:flow:5-docs` | Document | Documente, met à jour CHANGELOG |
 | `/tdd:flow:6-done` | Commit | Commit, met à jour state.json |
 
@@ -50,6 +50,38 @@ Commandes pour le cycle de développement TDD.
 │       └──────────────────────────────────────────────┘      │
 │                     (tâche suivante)                        │
 └─────────────────────────────────────────────────────────────┘
+```
+
+## Code Coverage
+
+Le coverage est intégré au flow TDD :
+
+**Quand :**
+- `2-test` : Capture le baseline avant d'écrire les tests
+- `4-review` : Valide que le coverage respecte les seuils
+
+**Commandes :**
+```bash
+# Exécuter tests avec coverage
+dotnet test --collect:"XPlat Code Coverage" --results-directory ./TestResults
+
+# Générer rapport texte
+reportgenerator -reports:"./TestResults/*/coverage.cobertura.xml" -targetdir:"./TestResults/CoverageReport" -reporttypes:TextSummary
+
+# Afficher résumé
+cat ./TestResults/CoverageReport/Summary.txt
+```
+
+**Seuils minimaux :**
+| Métrique | Seuil |
+|----------|-------|
+| Line coverage (Spotlight.Core) | ≥ 80% |
+| Branch coverage | ≥ 60% |
+| Nouvelles classes | ≥ 90% |
+
+**Prérequis :**
+```bash
+dotnet tool install -g dotnet-reportgenerator-globaltool
 ```
 
 ## Structure des fichiers

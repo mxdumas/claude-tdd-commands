@@ -9,7 +9,27 @@
 - Charger `docs/current-task.md`
 - Lire les tests similaires existants pour comprendre les patterns
 
-### 2. Réflexion avant d'écrire
+### 2. Capturer le coverage baseline
+
+Avant d'écrire les tests, capturer le coverage actuel pour comparaison :
+
+```bash
+# Nettoyer les anciens résultats
+rm -rf ./TestResults
+
+# Exécuter avec coverage
+dotnet test --collect:"XPlat Code Coverage" --results-directory ./TestResults
+
+# Générer le rapport texte
+reportgenerator -reports:"./TestResults/*/coverage.cobertura.xml" -targetdir:"./TestResults/CoverageReport" -reporttypes:TextSummary
+
+# Afficher le résumé
+cat ./TestResults/CoverageReport/Summary.txt
+```
+
+**Noter le coverage baseline** (line coverage %) pour comparaison à l'étape review.
+
+### 3. Réflexion avant d'écrire
 
 **Comportement métier :**
 - Quels sont les scénarios d'utilisation réels ?
@@ -27,7 +47,22 @@
 - Fichiers malformés / données corrompues
 - États incohérents possibles
 
-### 3. Catégories de tests
+### 4. Type de tests à créer
+
+**Décider où placer les tests :**
+
+| Type | Projet | Quand l'utiliser |
+|------|--------|------------------|
+| **Unitaire** | `Spotlight.Core.Tests` | Logique isolée, calculs, transformations, validation |
+| **Intégration** | `Spotlight.Core.IntegrationTests` | I/O fichiers, multi-composants, scénarios end-to-end |
+
+**Indices pour choisir :**
+- Besoin de vrais fichiers sur disque ? → Intégration
+- Teste plusieurs classes ensemble ? → Intégration
+- Logique pure sans dépendances externes ? → Unitaire
+- Validation d'entrées / cas d'erreur ? → Unitaire
+
+### 5. Catégories de tests
 
 **Priorité haute :**
 - **Comportement métier** - Ce que fait le code pour l'utilisateur
@@ -39,7 +74,7 @@
 - **Intégration** - Interactions entre composants
 - **Gestion d'erreurs** - Récupération, messages explicites
 
-### 4. Nommage
+### 6. Nommage
 
 ```csharp
 // Bon : Décrit un comportement
@@ -53,7 +88,7 @@ public void Import_CallsParser_ThenCreatesFixture()
 
 Pattern : `Action_Context_ExpectedResult`
 
-### 5. Structure
+### 7. Structure
 
 ```csharp
 [Fact]
@@ -72,7 +107,7 @@ public void Import_WithColorWheel_ExtractsAllSlots()
 }
 ```
 
-### 6. Tests paramétrés
+### 8. Tests paramétrés
 
 ```csharp
 [Theory]
@@ -81,14 +116,14 @@ public void Import_WithColorWheel_ExtractsAllSlots()
 public void Import_DifferentFormats_SetsCorrectSource(string file, string expected)
 ```
 
-### 7. Ce qu'il faut éviter
+### 9. Ce qu'il faut éviter
 
 - `Assert.NotNull(result)` seul (ne teste rien de significatif)
 - Tester l'implémentation interne (mocks qui vérifient les appels)
 - Noms génériques (`Test1`, `Add_Works`)
 - Dépendance à l'ordre des éléments
 
-### 8. Checklist par méthode publique
+### 10. Checklist par méthode publique
 
 | Catégorie | Vérifié ? |
 |-----------|-----------|
@@ -99,18 +134,18 @@ public void Import_DifferentFormats_SetsCorrectSource(string file, string expect
 | Cas limites réalistes | |
 | Modes d'erreur | |
 
-### 9. Écrire les tests
+### 11. Écrire les tests
 
 Créer les fichiers de `docs/current-task.md`. Les tests doivent **compiler mais ÉCHOUER**.
 
-### 10. Vérifier
+### 12. Vérifier
 
 ```bash
 dotnet build  # Doit passer
 dotnet test   # Doit ÉCHOUER (RED)
 ```
 
-### 11. Finaliser
+### 13. Finaliser
 
 Mettre `current.phase` = "dev".
 
@@ -126,6 +161,7 @@ Mettre `current.phase` = "dev".
 - Edge cases: 3
 - Erreurs: 2
 
+**Coverage baseline:** 85.2% (avant nouveaux tests)
 **Build:** OK
 **Tests:** 0/18 passed (RED) ✓
 

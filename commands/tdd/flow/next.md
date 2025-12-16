@@ -24,7 +24,7 @@ Projet non initialisé. Lancer `/tdd:init:1-project` d'abord.
 | `review` | Exécuter `/tdd:flow:4-review` |
 | `docs` | Exécuter `/tdd:flow:5-docs` |
 
-**Note :** Après `docs`, la phase reste `docs` jusqu'à ce que `/tdd:flow:6-done` soit lancé manuellement (commit = action explicite).
+**Note:** Après `docs`, la phase reste `docs` jusqu'à ce que `/tdd:flow:6-done` soit lancé manuellement (commit = action explicite).
 
 ### 3. Exécuter la commande
 
@@ -35,3 +35,4 @@ Charger et exécuter les instructions de la commande correspondante.
 - `/tdd:flow:6-done` n'est jamais appelé automatiquement (commit = décision utilisateur)
 - Si epic terminé, suggérer de passer au suivant
 - Raccourci pratique pour ne pas avoir à retenir quelle commande lancer
+- Toutes les phases (sauf 1-analyze) utilisent `.tdd-context.md` pour le contexte

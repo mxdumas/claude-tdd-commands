@@ -71,7 +71,7 @@ Pour chaque fichier modifié/créé:
 **D. Conformité standards (de .tdd-context.md > Conventions clés)**
 - [ ] File-scoped namespaces
 - [ ] Records pour modèles immuables
-- [ ] Nullable enabled (pas de `!` suppression)
+- [ ] Nullable enabled (pas de suppression avec !)
 - [ ] CancellationToken sur async
 - [ ] XML docs en français
 
